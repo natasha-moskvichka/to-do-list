@@ -18,4 +18,5 @@
    ```bash
    git clone https://github.com
    ```
-2. Откройте файл `index.html` в любом современном браузере (или запустите через расширение Live Server в VS Code).
+2. Откройте файл `index.html` в любом современном браузере (или запустите через расширение Live Server в VS Code)
+3. Вы можете открыть приложение в браузере по ссылке: <https://natasha-moskvichka.github.io/to-do-list/>
