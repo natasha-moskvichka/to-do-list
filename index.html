@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Список дел</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">Список задач</h1>
+    <div class="user-field">
+        <div class="input-area">
+            <input type="text" class="input" placeholder="Поиск задачи..." id="input-search">
+            <button type="button" class="btn btn-default btn__icon btn-search">
+                <svg class="icon" width="21" height="21">
+                    <use href="./fonts/sprite/sprite.svg#search"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="select">
+            <button type="button" class="btn btn-fill btn__text btn-select">
+                <span class="btn-text">Все задачи</span>
+                <svg class="icon chevron" width="7" height="4">
+                    <use href="./fonts/sprite/sprite.svg#chevron-top"></use>
+                </svg>
+            </button>
+
+            <div class="dropdown hidden">
+                <div class="dropdown-container">
+                    <ul class="select-task">
+                        <li class="select-task--item">Все</li>
+                        <li class="select-task--item">Завершенные</li>
+                        <li class="select-task--item">Незавершенные</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-fill btn__icon theme">
+            <svg class="icon" width="24" height="24">
+                <use href="./fonts/sprite/sprite.svg#theme-light"></use>
+            </svg>
+        </button>
+    </div>
+    <div class="tasks">
+        <!--place for tasks-->
+        <ul class="my-task"></ul>
+        <div class="tasks-empty">
+            <img src="images/plug-empty.png" alt="Plug">
+            <p class="text">Пусто...</p>
+        </div>
+
+    </div>
+    <div class="new-task">
+        <button type="button" class="btn btn-clear btn-outline clear">Удалить все задачи</button>
+        <button type="button" class="btn btn-add btn-fill">
+            <svg class="icon" width="24" height="24">
+                <use href="./fonts/sprite/sprite.svg#add"></use>
+            </svg>
+        </button>
+    </div>
+
+</div>
+<div class="container-overlay hidden">
+    <div class="overlay">
+        <div class="modal">
+            <h2 class="title">Новая задача</h2>
+            <div class="user-field">
+                <div class="input-area">
+                    <input type="text" class="input input-new-value" placeholder="Введите задачу...">
+                </div>
+            </div>
+            <div class="control-field">
+                <button type="button" class="btn btn-delete__new btn-outline btn__icon theme">
+                    <span class="btn-text">Отмена</span>
+                </button>
+                <button type="button" class="btn btn-add__new btn-fill btn__icon theme">
+                    <span class="btn-text">Сохранить</span>
+                </button>
+                <button type="button" id="btnSaveEdit" class="btn btn-add__new btn-fill btn__icon theme hidden">
+                    <span class="btn-text">Сохранить</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

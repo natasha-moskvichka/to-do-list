@@ -1,0 +1,13 @@
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Настройки редакторов кода (VS Code, WebStorm)
+.vscode/
+.idea/
+
+# Карты кода CSS
+*.css.map
+
+#Временные папки
+.sass-cache/
