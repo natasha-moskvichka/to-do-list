@@ -1,6 +1,6 @@
 //toggle theme
 const html = document.documentElement;
-const toggleBtn = document.querySelector('.theme');
+const toggleBtn = document.querySelector('.toolbar__theme-btn');
 
 const saveTheme = localStorage.getItem('theme') || 'light';
 html.setAttribute('data-theme', saveTheme);
@@ -16,28 +16,28 @@ toggleBtn.addEventListener('click', toggleTheme);
 
 let tasks = JSON.parse(localStorage.getItem('tasks') || '[]'); // беру из браузера список задач, который там был сохранен
 
-const container = document.querySelector('.container');
-const openModalBtn = container.querySelector('.btn-add');
-const overlay = document.querySelector('.container-overlay');
-const tasksList = container.querySelector('.my-task');
-const btnConfirmAdd = document.querySelector('.btn-add__new'); // btn apply
-const btnCancelAdd = document.querySelector('.btn-delete__new'); // btn cancel
-const inputTask = document.querySelector('.input-new-value');
-const clearBtn = document.querySelector('.clear');
-const plug = container.querySelector('.tasks-empty');
+const container = document.querySelector('.todo');
+const openModalBtn = container.querySelector('.actions__add-btn');
+const modal = document.querySelector('.modal');
+const tasksList = container.querySelector('.tasks-list__items');
+const btnConfirmAdd = document.querySelector('.modal__btn-save'); // btn apply
+const btnCancelAdd = document.querySelector('.modal__btn-cancel'); // btn cancel
+const inputTask = document.querySelector('.modal__input');
+const clearBtn = document.querySelector('.actions__clear-btn');
+const plug = container.querySelector('.task-list__empty');
 const search = container.querySelector('#input-search');
-const btnSearchTask = container.querySelector('.btn-search');
-const btnSelectTask = container.querySelector('.btn-select');
-const dropdown = container.querySelector('.dropdown');
-const chevron = container.querySelector('.chevron');
-const btnSaveEdit = document.querySelector('#btnSaveEdit');
+const btnSearchTask = container.querySelector('.search__button');
+const btnSelectTask = container.querySelector('.filter__button');
+const btnConfirmEdit = document.querySelector('#btnSaveEdit');
 let currentEditIndex = null;
 
 function updatePlaceholder() {
     if (tasks.length > 0) {
         plug.classList.add('hidden');
+        clearBtn.classList.remove('hidden');
     } else {
         plug.classList.remove('hidden');
+        clearBtn.classList.add('hidden');
     }
 }
 
@@ -45,13 +45,13 @@ function createTaskButtons() {
     const SVG_NS = 'http://www.w3.org/2000/svg';
 
     const editTaskBtn = document.createElement('button');
-    editTaskBtn.className = 'btn btn-default btn-edit';
+    editTaskBtn.className = 'btn task__btn-edit';
 
     /*create svg*/
     const editIcon = document.createElementNS(SVG_NS, 'svg');
     editIcon.setAttribute('width', '18');
     editIcon.setAttribute('height', '18');
-    editIcon.classList.add('icon', 'edit');
+    editIcon.classList.add('task__icon-edit');
 
     const editUse = document.createElementNS(SVG_NS, 'use');
     editUse.setAttribute('href', './fonts/sprite/sprite.svg#edit');
@@ -59,12 +59,12 @@ function createTaskButtons() {
     editTaskBtn.appendChild(editIcon);
 
     const deleteTaskBtn = document.createElement('button');
-    deleteTaskBtn.className = 'btn btn-default btn-trash';
+    deleteTaskBtn.className = 'btn task__btn-trash';
 
     const deleteIcon = document.createElementNS(SVG_NS, 'svg');
     deleteIcon.setAttribute('width', '18');
     deleteIcon.setAttribute('height', '18');
-    deleteIcon.classList.add('icon', 'trash');
+    deleteIcon.classList.add('task__icon-trash');
     const deleteUse = document.createElementNS(SVG_NS, 'use');
     deleteUse.setAttribute('href', './fonts/sprite/sprite.svg#trash');
     deleteIcon.appendChild(deleteUse);
@@ -73,7 +73,7 @@ function createTaskButtons() {
     const checkboxIcon = document.createElementNS(SVG_NS, 'svg');
     checkboxIcon.setAttribute('width', '26');
     checkboxIcon.setAttribute('height', '26');
-    checkboxIcon.classList.add('icon', 'current-checkbox');
+    checkboxIcon.classList.add('btn__icon', 'current-checkbox');
     const checkboxUse = document.createElementNS(SVG_NS, 'use');
     checkboxUse.setAttribute('href', './fonts/sprite/sprite.svg#checkbox');
     checkboxIcon.appendChild(checkboxUse);
@@ -81,7 +81,7 @@ function createTaskButtons() {
     const checkIcon = document.createElementNS(SVG_NS, 'svg');
     checkIcon.setAttribute('width', '15');
     checkIcon.setAttribute('height', '15');
-    checkIcon.classList.add('icon', 'active-check');
+    checkIcon.classList.add('btn__icon', 'active-check');
     const checkUse = document.createElementNS(SVG_NS, 'use');
     checkUse.setAttribute('href', './fonts/sprite/sprite.svg#check');
     checkIcon.appendChild(checkUse);
@@ -91,7 +91,7 @@ function createTaskButtons() {
 
 function createTaskLi(text) {
     const listItem = document.createElement('li');
-    listItem.className = 'task';
+    listItem.className = 'tasks-list__items-cell task';
 
     const uniqueId = 'todo-' + Date.now() + Math.random().toString(36).slice(2, 4);
 
@@ -115,7 +115,7 @@ function createTaskLi(text) {
 
     // Текст в спан
     const textSpan = document.createElement('span');
-    textSpan.classList.add('task-text');
+    textSpan.classList.add('task__text');
     textSpan.textContent = text;
     listItem.appendChild(textSpan);
 
@@ -133,34 +133,34 @@ function createTaskLi(text) {
     return listItem;
 }
 
-function renderTask(text) { //  это шаблон, который создает задачу на основе переданного текста
+function renderTask(text) {
     const fullTaskRow = createTaskLi(text);
     tasksList.appendChild(fullTaskRow);
 }
 
 function saveTask() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));// Внутри функции она читает переменную tasks (которая объявлена снаружи), и обязательно ей ничего не нужно передавать — она работает с глобальной или замкнутой переменной
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function onHandlerSave() {
     const value = inputTask.value.trim();
     if (value === '' || currentEditIndex === null) return;
 
-    tasks[currentEditIndex] = value; // обновляем задачу в массиве данных
-    localStorage.setItem('tasks', JSON.stringify(tasks)); // Сохраняем обновленный массив в localStorage
+    tasks[currentEditIndex] = value;
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
     const taskElements = document.querySelectorAll('.task');
     const taskDom = taskElements[currentEditIndex];
 
     if (taskDom) {
-        const textSpan = taskDom.querySelector('.task-text');
+        const textSpan = taskDom.querySelector('.task__text');
         if (textSpan) {
             textSpan.textContent = value;
         }
     }
 
     inputTask.value = '';
-    overlay.classList.add('hidden');
+    modal.classList.add('modal--hidden');
     updatePlaceholder();
 }
 
@@ -172,7 +172,6 @@ function searchTask() {
     taskElements.forEach(taskElement => {
         const taskText = taskElement.textContent ? taskElement.textContent.trim().toLowerCase() : '';
 
-        console.log(taskText)
         if (searchTaskValue === '') {
             return;
         }
@@ -197,22 +196,20 @@ function openModalNewTask () {
 
     const title = document.querySelector('h2');
     title.textContent = 'Создать новую задачу';
-
+    //openModalBtn.classList.remove('modal--hidden');
     btnConfirmAdd.classList.remove('hidden');
-    btnSaveEdit.classList.add('hidden');
+    btnSaveEdit.classList.add('modal__btn-save--hidden');
 
-    overlay.classList.remove('hidden');
+    modal.classList.remove('modal--hidden');
 }
 
 btnSelectTask.addEventListener('click', selectTask);
-
 btnSearchTask.addEventListener('click', searchTask);
 
 clearBtn.addEventListener('click', () => {
     tasks = [];
     localStorage.setItem('tasks', JSON.stringify(tasks));
     tasksList.innerHTML = '';
-
     updatePlaceholder();
 })
 
@@ -220,7 +217,7 @@ openModalBtn.addEventListener('click', openModalNewTask)
 
 btnCancelAdd.addEventListener('click', () => {
     inputTask.value = '';
-    overlay.classList.add('hidden');
+    modal.classList.add('modal--hidden');
     updatePlaceholder();
 })
 
@@ -228,34 +225,35 @@ btnConfirmAdd.addEventListener('click', () => {
     const value = inputTask.value.trim();
     if (value === '') return;
     tasks.push(value);
-    saveTask(); // Вызов saveTasks() — просто говорит: "сохранить текущее состояние массива tasks"
-    renderTask(value); // конкретно говорит: "Создай задачу для текста value"
+    saveTask();
+    renderTask(value);
     inputTask.value = '';
-    overlay.classList.add('hidden');
+    modal.classList.add('modal--hidden');
     updatePlaceholder();
 });
 
-btnSaveEdit.addEventListener('click', onHandlerSave);
+btnConfirmEdit.addEventListener('click', onHandlerSave);
 
 tasksList.addEventListener('click', (e) => {
     const targetElem = e.target;
-    const trashBtn = targetElem.closest('.btn-trash');
-    const editBtn = targetElem.closest('.btn-edit');
+    const trashBtn = targetElem.closest('.task__btn-trash');
+    const editBtn = targetElem.closest('.task__btn-edit');
 
     if (trashBtn) {
         const taskItem = trashBtn.closest('.task');
         if (!taskItem) return;
 
-        const textSpan = taskItem.querySelector('.task-text');
+        const textSpan = taskItem.querySelector('.task__text');
         const taskText = textSpan ? textSpan.textContent.trim() : '';
 
-        const index = tasks.findIndex(task => task === taskText);
+        //const index = tasks.findIndex(task => task === taskText);
+        const taskElements = Array.from(tasksList.querySelectorAll('.task'));
+        const index = taskElements.indexOf(taskItem);
 
-        if (index !== -1) { // splice -1 === false,
-            tasks.splice(index, 1) // удалить с позиции индекса 1 элемент
-
+        if (index !== -1) {
+            tasks.splice(index, 1);
             localStorage.setItem('tasks', JSON.stringify(tasks));
-            taskItem.remove(); // delete from DOM
+            taskItem.remove();
         }
     } else if (editBtn) {
         /*редактирование текущей задачи*/
@@ -263,38 +261,26 @@ tasksList.addEventListener('click', (e) => {
 
         if (!editTask) return;
 
-        const textSpan = editTask.querySelector('.task-text');
+        const textSpan = editTask.querySelector('.task__text');
         const editTaskText = textSpan ? textSpan.textContent.trim() : '';
 
-        const index = tasks.findIndex(currentTask => currentTask === editTaskText);
-        if (index !== -1) {
-            currentEditIndex = index;
-        }
+        //const index = tasks.findIndex(currentTask => currentTask === editTaskText);
+        const taskElements = Array.from(tasksList.querySelectorAll('.task'));
+        currentEditIndex = taskElements.indexOf(editTask);
 
-        overlay.classList.remove('hidden');
+        modal.classList.remove('modal--hidden');
 
         const title = document.querySelector('h2');
         title.textContent = 'Редактирование задачи';
         inputTask.placeholder = editTaskText;
         inputTask.value = editTaskText;
 
-        // const saveEditTask = document.createElement('button');
-        // const saveEditTaskText = document.createElement('span');
-        // saveEditTask.classList.add('btn');
-        // saveEditTask.classList.add('btn-fill');
-        // saveEditTaskText.classList.add('btn-text');
-        // saveEditTaskText.textContent = 'Save';
-        // saveEditTask.appendChild(saveEditTaskText);
-        // controlBtn.appendChild(saveEditTask);
-
-btnConfirmAdd.classList.add('hidden');
-btnSaveEdit.classList.remove('hidden');
-        //saveEditTask.addEventListener('click', onHandlerSave);
+        btnConfirmAdd.classList.add('hidden');
+        btnConfirmEdit.classList.remove('modal__btn-save--hidden');
     }
 
     updatePlaceholder();
 })
 
-tasks.forEach(renderTask); //для каждого элемента вызывай функцию
+tasks.forEach(renderTask);
 updatePlaceholder();
-
