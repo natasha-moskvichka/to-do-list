@@ -162,7 +162,8 @@ li {
 }
 
 .task__btn-trash,
-.task__btn-edit {
+.task__btn-edit,
+.task__btn-status {
   position: absolute;
 }
 
@@ -190,6 +191,19 @@ li {
   &:hover .task__icon-trash {
     color: var(--clr-red-500);
   }
+}
+
+.task__btn-status{
+  top: 7px;
+  right: 114px;
+}
+
+.task__span-status {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--clr-grey-300);
+  border-radius: 100%;
 }
 
 .toolbar__theme-btn {
@@ -262,7 +276,7 @@ li {
   border: 1px solid var(--clr-purple-500);
   border-radius: 6px;
   width: 100%;
-  background-color: var(--clr-grey-100);
+  background-color: var(--bg-main);
   z-index: 2;
 }
 
@@ -282,6 +296,10 @@ li {
   transform: rotate(180deg);
 }
 
+.btn__status--important {
+  background-color: var(--clr-red-500);
+}
+
 .rotate {
   transform: rotate(0deg);
 }
@@ -299,10 +317,11 @@ li {
   font-size: 20px;
   color: var(--clr-grey-900);
   position: relative;
-  padding: 16px 90px 16px 6px;
+  padding: 16px 90px 16px 18px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  border-left: 4px solid transparent;
 
   &:hover {
     background-color: var(--clr-purple-50);
@@ -360,9 +379,13 @@ li {
   outline: none;
 }
 
+.task--important {
+  border-color: var(--clr-red-500);
+}
+
 .completed .active-check {
   display: inline-block;
-  left: 12px;
+  left: 18px;
   top: 20px;
   position: absolute;
   color: var(--clr-grey-100);
