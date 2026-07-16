@@ -32,8 +32,11 @@ const btnConfirmEdit = document.querySelector('#btnSaveEdit');
 const filterBtns = container.querySelectorAll('.filter__item');
 const filterDropdown = container.querySelector('.filter__dropdown');
 const btnChevron = container.querySelector('.btn__chevron');
+const celebrationModal = document.querySelector('#celebrationModal');
+const btnCloseCelebration = document.querySelector('#btnCloseCelebration');
+
 let currentEditIndex = null;
-let currentFilter = 'uncompleted';
+let currentFilter = 'all';
 
 function updatePlaceholder() {
     if (tasks.length > 0) {
@@ -140,6 +143,12 @@ function createTaskLi(taskStorage) {
         deleteTaskBtn.classList.toggle('hidden', checkbox.checked);
 
         saveTask();
+
+        const isAllCompleted = tasks.length > 0 && tasks.every(task => task.completed === true);
+        if (isAllCompleted === true) {
+            celebrationModal.classList.remove('modal--hidden');
+            confetti({ zIndex: 99999 });
+        }
     });
 
     return listItem;
@@ -210,7 +219,7 @@ function filterAndRenderTasks() {
        }
    })
 
-    filteredTasks.forEach(renderTask)
+    filteredTasks.forEach(renderTask);
 }
 
 function openModalNewTask() {
@@ -327,6 +336,10 @@ filterBtns.forEach(filterBtn => {
         filterDropdown.classList.add('hidden');
         btnChevron.classList.remove('hidden');
     });
+});
+
+btnCloseCelebration.addEventListener('click', () => {
+    celebrationModal.classList.add('modal--hidden');
 })
 
 filterAndRenderTasks();

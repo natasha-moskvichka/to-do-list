@@ -398,7 +398,8 @@ li {
   display: inline-block;
 }
 
-.modal__card {
+.modal__card,
+.modal__content {
   position: fixed;
   background-color: var(--bg-main);
   z-index: 3;
