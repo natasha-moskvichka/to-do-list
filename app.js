@@ -29,7 +29,10 @@ const search = container.querySelector('#input-search');
 const btnSearchTask = container.querySelector('.search__button');
 const btnSelectTask = container.querySelector('.filter__button');
 const btnConfirmEdit = document.querySelector('#btnSaveEdit');
+const filterBtns = container.querySelectorAll('.filter__item');
+const filterDropdown = container.querySelector('.filter__dropdown');
 let currentEditIndex = null;
+let currentFilter = 'uncompleted';
 
 function updatePlaceholder() {
     if (tasks.length > 0) {
@@ -89,22 +92,20 @@ function createTaskButtons() {
     return {editTaskBtn, deleteTaskBtn, checkIcon, checkboxIcon};
 }
 
-function createTaskLi(text) {
+function createTaskLi(taskStorage) {
     const listItem = document.createElement('li');
     listItem.className = 'tasks-list__items-cell task';
-
-    const uniqueId = 'todo-' + Date.now() + Math.random().toString(36).slice(2, 4);
 
     const checkbox = document.createElement('input');
     checkbox.className = 'checkbox visually-hidden';
     checkbox.type = 'checkbox';
-    checkbox.id = uniqueId;
+    checkbox.id = taskStorage.id;
     listItem.appendChild(checkbox);
 
     //label
     const label = document.createElement('label');
-    label.htmlFor = uniqueId;
     label.className = 'checkbox-label';
+    label.htmlFor = taskStorage.id;
 
     // Получаем иконки для чекбокса
     const {checkIcon, checkboxIcon} = createTaskButtons();
@@ -116,7 +117,7 @@ function createTaskLi(text) {
     // Текст в спан
     const textSpan = document.createElement('span');
     textSpan.classList.add('task__text');
-    textSpan.textContent = text;
+    textSpan.textContent = taskStorage.title;
     listItem.appendChild(textSpan);
 
     // Кнопки управления задачей
@@ -124,18 +125,28 @@ function createTaskLi(text) {
     listItem.appendChild(editTaskBtn);
     listItem.appendChild(deleteTaskBtn);
 
+    if (taskStorage.completed) {
+        checkbox.checked = true;
+        listItem.classList.add('completed');
+        editTaskBtn.classList.add('hidden');
+        deleteTaskBtn.classList.add('hidden');
+    }
+
     checkbox.addEventListener('change', () => {
+        taskStorage.completed = checkbox.checked;
         listItem.classList.toggle('completed', checkbox.checked);
         editTaskBtn.classList.toggle('hidden', checkbox.checked);
         deleteTaskBtn.classList.toggle('hidden', checkbox.checked);
+
+        saveTask();
     });
 
     return listItem;
 }
 
-function renderTask(text) {
-    const fullTaskRow = createTaskLi(text);
-    tasksList.appendChild(fullTaskRow);
+function renderTask(taskStorage) {
+    const fullTaskRow = createTaskLi(taskStorage)
+    tasksList.appendChild(fullTaskRow); // в ul вставляю li
 }
 
 function saveTask() {
@@ -183,27 +194,40 @@ function searchTask() {
     })
 }
 
-function selectTask() {
-    // btnSelectTask.classList.toggle('active');
-    // dropdown.classList.remove('hidden');
-    // chevron.style.transform = 'rotate(0)'
+function filterAndRenderTasks() {
+    tasksList.innerHTML = '';
+
+   const filteredTasks = tasks.filter(elem => {
+       if (currentFilter === 'all') {
+           return true;
+       }
+       if (currentFilter === 'completed') {
+           return elem.completed === true;
+       }
+       if (currentFilter === 'uncompleted') {
+           return elem.completed === false;
+       }
+   })
+
+    filteredTasks.forEach(renderTask)
 }
 
-function openModalNewTask () {
+function openModalNewTask() {
     currentEditIndex = null;
     inputTask.value = '';
     inputTask.placeholder = 'Введите новую задачу...';
 
     const title = document.querySelector('h2');
     title.textContent = 'Создать новую задачу';
-    //openModalBtn.classList.remove('modal--hidden');
     btnConfirmAdd.classList.remove('hidden');
-    btnSaveEdit.classList.add('modal__btn-save--hidden');
+    btnConfirmEdit.classList.add('modal__btn-save--hidden');
 
     modal.classList.remove('modal--hidden');
 }
 
-btnSelectTask.addEventListener('click', selectTask);
+btnSelectTask.addEventListener('click', () => {
+    filterDropdown.classList.toggle('hidden');
+});
 btnSearchTask.addEventListener('click', searchTask);
 
 clearBtn.addEventListener('click', () => {
@@ -221,12 +245,23 @@ btnCancelAdd.addEventListener('click', () => {
     updatePlaceholder();
 })
 
+/*добавление новой задачи*/
 btnConfirmAdd.addEventListener('click', () => {
+    const uniqueId = 'todo-' + Date.now() + Math.random().toString(36).slice(2, 4);
+
+    let taskData = {
+        id: '',
+        title: '',
+        completed: false
+    }
     const value = inputTask.value.trim();
     if (value === '') return;
-    tasks.push(value);
+    taskData.title = value;
+    taskData.id = uniqueId;
+    console.log(taskData)
+    tasks.push(taskData);
     saveTask();
-    renderTask(value);
+    renderTask(taskData);
     inputTask.value = '';
     modal.classList.add('modal--hidden');
     updatePlaceholder();
@@ -280,7 +315,16 @@ tasksList.addEventListener('click', (e) => {
     }
 
     updatePlaceholder();
+});
+
+filterBtns.forEach(filterBtn => {
+    filterBtn.addEventListener('click', (e) => {
+        currentFilter = e.target.getAttribute('data-filter');
+        filterAndRenderTasks();
+
+        filterDropdown.classList.add('hidden');
+    });
 })
 
-tasks.forEach(renderTask);
+filterAndRenderTasks();
 updatePlaceholder();
