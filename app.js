@@ -31,6 +31,7 @@ const btnSelectTask = container.querySelector('.filter__button');
 const btnConfirmEdit = document.querySelector('#btnSaveEdit');
 const filterBtns = container.querySelectorAll('.filter__item');
 const filterDropdown = container.querySelector('.filter__dropdown');
+const btnChevron = container.querySelector('.btn__chevron');
 let currentEditIndex = null;
 let currentFilter = 'uncompleted';
 
@@ -227,6 +228,7 @@ function openModalNewTask() {
 
 btnSelectTask.addEventListener('click', () => {
     filterDropdown.classList.toggle('hidden');
+    btnChevron.classList.toggle('rotate');
 });
 btnSearchTask.addEventListener('click', searchTask);
 
@@ -323,6 +325,7 @@ filterBtns.forEach(filterBtn => {
         filterAndRenderTasks();
 
         filterDropdown.classList.add('hidden');
+        btnChevron.classList.remove('hidden');
     });
 })
 
