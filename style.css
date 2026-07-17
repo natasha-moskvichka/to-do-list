@@ -19,7 +19,7 @@
   --box-shadow: 0 0 4px 0 var(--clr-indigo-500);
   /*base colors*/
   --bg-main: var(--clr-slate-50);
-  --bg-surface: var(--clr-slate-900);
+  --bg-surface: var(--clr-white);
   --bg-surface-hover: var(--clr-indigo-50);
   --bg-overlay: rgba(15, 23, 42, 0.4);
   /* Текстовые цвета (Typography) */
@@ -520,6 +520,7 @@ li {
     grid-column: auto;
   }
   .modal__card {
+    position: absolute;
     min-width: 32rem;
     min-height: 18rem;
     transform: translate(-50%, -50%);
