@@ -1,67 +1,67 @@
 :root {
   /*global colors*/
-  --clr-purple-500: #6C63FF;
-  --clr-purple-600: #584fdc;
-  --clr-purple-700: #544cc2;
-  --clr-purple-200: #b1acfc;
-  --clr-purple-100: #C3C1E5;
-  --clr-purple-50: #EEEDFD;
+  --clr-indigo-500: #6366f1;
+  --clr-indigo-600: #4f46e5;
+  --clr-indigo-700: #4338ca;
+  --clr-indigo-200: #c7d2fe;
+  --clr-indigo-100: #e0e7ff;
+  --clr-indigo-50:  #f5f3ff;
 
-  --clr-grey-100: #f7f7f7;
-  --clr-grey-300: #666666;
-  --clr-grey-900: #252525;
-  --clr-grey-800: #333337;
+  --clr-slate-50:  #f8fafc;
+  --clr-slate-100: #f1f5f9;
+  --clr-slate-400: #94a3b8;
+  --clr-slate-500: #64748b;
+  --clr-slate-800: #1e293b;
+  --clr-slate-900: #0f172a;
 
-  --clr-red-500: #E50000;
   --clr-white: #ffffff;
+  --clr-red-500: #ef4444;
+  --clr-amber-500: #fbbf24;
 
-  --box-shadow: 0 0 4px 0 var(--clr-purple-500);
+  --box-shadow: 0 0 4px 0 var(--clr-indigo-500);
 
   /*base colors*/
-  --bg-main: var(--clr-grey-100);
-  --bg-surface: var(--clr-white);
-  --bg-surface-hover: var(--clr-purple-50);
-  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-main: var(--clr-slate-50);
+  --bg-surface: var(--clr-slate-900);
+  --bg-surface-hover: var(--clr-indigo-50);
+  --bg-overlay: rgba(15, 23, 42, 0.4);
 
   /* Текстовые цвета (Typography) */
-  --text-primary: var(--clr-grey-900);
-  --text-muted: var(--clr-grey-400);
+  --text-primary: var(--clr-slate-900);
+  --text-muted: var(--clr-slate-400);
   --text-on-accent: var(--clr-white);
 
   /* Акцентные цвета*/
-  --accent: var(--clr-purple-500);
-  --accent-hover: var(--clr-purple-600);
-  --accent-active: var(--clr-purple-700);
-  --accent-light: var(--clr-purple-100);
+  --accent: var(--clr-indigo-500);
+  --accent-hover: var(--clr-indigo-600);
+  --accent-active: var(--clr-indigo-700);
+  --accent-light: var(--clr-indigo-100);
 
   /* Границы и разделители*/
-  --border-main: var(--clr-purple-500);
-  --border-light: var(--clr-purple-200);
+  --border-main: var(--clr-indigo-200);
+  --border-light: var(--clr-slate-100);
 
   /*Статусы*/
   --status-danger: var(--clr-red-500);
+  --status-important: var(--clr-amber-500);
 
   /*Эффекты*/
-  --shadow-main: 0 0 4px 0 var(--accent);
+  --shadow-main: 0 4px 6px -1px rgba(99, 102, 241, 0.08), 0 2px 4px -2px rgba(99, 102, 241, 0.04);
 
   --padding-base: 16px;
-  --radius-base: 12px;
+  --radius-base: 5px;
 }
 
 :root[data-theme="dark"] {
-  --bg-main: var(--clr-grey-900);
-  --bg-surface: var(--clr-grey-800);
-  --bg-surface-hover: var(--clr-grey-900);
+  --bg-main: var(--clr-slate-900);
+  --bg-surface: var(--clr-slate-800);
+  --bg-surface-hover: var(--clr-slate-900);
 
-  --text-primary: var(--clr-grey-100);
-  --text-muted: var(--clr-grey-400);
-
-  .search__input::placeholder {
-    color: var(--clr-grey-300);
-  }
+  --text-primary: var(--clr-slate-100);
+  --text-muted: var(--clr-slate-400);
 
   .task:hover {
-    background-color: var(--clr-grey-800);
+    background-color: var(--clr-slate-800);
   }
 }
 
@@ -76,7 +76,7 @@ body {
   font-weight: 500;
   min-height: 100vh;
   background: var(--bg-main);
-  color: var(--clr-grey-900);
+  color: var(--clr-slate-900);
 }
 
 input {
@@ -106,8 +106,18 @@ li {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - calc(var(--padding-base) * 2));
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 /*-----buttons-----*/
 .btn {
   border: 1px solid transparent;
@@ -127,12 +137,12 @@ li {
 }
 
 .btn--outline {
-  border: 1px solid var(--clr-purple-500);
-  border-radius: 5px;
+  border: 1px solid var(--clr-indigo-500);
+  border-radius: var(--radius-base);
   padding: 10px 20px;
 
   .btn__text {
-    color: var(--clr-purple-500);
+    color: var(--clr-indigo-500);
   }
 }
 
@@ -142,8 +152,8 @@ li {
 }
 
 .btn--filled {
-  background-color: var(--clr-purple-500);
-  border-radius: 5px;
+  background-color: var(--clr-indigo-500);
+  border-radius: var(--radius-base);
 
   &:hover {
     box-shadow: var(--box-shadow);
@@ -151,7 +161,7 @@ li {
 
   .btn__icon,
   .btn__text {
-    color: var(--clr-grey-100);
+    color: var(--clr-slate-100);
   }
 }
 
@@ -172,11 +182,11 @@ li {
   top: 7px;
 
   .task__icon-edit {
-    color: var(--clr-grey-300);
+    color: var(--clr-slate-400);
   }
 
   &:hover .task__icon-edit {
-    color: var(--clr-purple-500);
+    color: var(--clr-indigo-500);
   }
 }
 
@@ -185,7 +195,7 @@ li {
   top: 7px;
 
   .task__icon-trash {
-    color: var(--clr-grey-300);
+    color: var(--clr-slate-400);
   }
 
   &:hover .task__icon-trash {
@@ -196,13 +206,17 @@ li {
 .task__btn-status{
   top: 7px;
   right: 114px;
+
+  &:hover .task__span-status {
+    background-color: var(--clr-red-500);
+  }
 }
 
 .task__span-status {
   display: inline-block;
   width: 12px;
   height: 12px;
-  background-color: var(--clr-grey-300);
+  background-color: var(--clr-slate-400);
   border-radius: 100%;
 }
 
@@ -230,7 +244,7 @@ li {
 /*-----input - select - dropdown-----*/
 .search__input,
 .modal__input {
-  border: 1px solid var(--clr-purple-500);
+  border: 1px solid var(--clr-indigo-500);
   line-height: 100%;
   color: var(--text-primary);
   width: 100%;
@@ -243,12 +257,13 @@ li {
 
 .search__input:focus {
   outline: none;
-  border: 1px solid var(--clr-purple-500);
+  border: 1px solid var(--clr-indigo-500);
   box-shadow: var(--box-shadow);
 }
 
-.search__input::placeholder {
-  color: var(--clr-purple-100);
+.search__input::placeholder,
+.modal__input::placeholder{
+  color: var(--clr-indigo-200);
   font-size: 16px;
 }
 
@@ -262,7 +277,7 @@ li {
     position: absolute;
     top: 22px;
     right: 10px;
-    color: var(--clr-purple-500);
+    color: var(--clr-indigo-500);
   }
 }
 
@@ -273,15 +288,14 @@ li {
 
 .filter__dropdown {
   position: absolute;
-  border: 1px solid var(--clr-purple-500);
-  border-radius: 6px;
-  width: 100%;
+  border: 1px solid var(--clr-indigo-500);
+  border-radius: var(--radius-base);
   background-color: var(--bg-main);
   z-index: 2;
 }
 
 .filter__item {
-  color: var(--clr-purple-500);
+  color: var(--clr-indigo-500);
   font-size: 16px;
   padding: 6px;
   cursor: default;
@@ -315,17 +329,13 @@ li {
 .task {
   text-transform: uppercase;
   font-size: 20px;
-  color: var(--clr-grey-900);
+  color: var(--clr-slate-900);
   position: relative;
   padding: 16px 90px 16px 18px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   border-left: 4px solid transparent;
-
-  &:hover {
-    background-color: var(--clr-purple-50);
-  }
 }
 
 .task::after {
@@ -333,13 +343,17 @@ li {
   position: absolute;
   width: 100%;
   height: 1px;
-  background-color: var(--clr-purple-200);
+  background-color: var(--clr-indigo-200);
   bottom: 0;
   left: 0;
 }
 
+.task:hover::after {
+  background-color: var(--clr-indigo-500);
+}
+
 .current-task {
-  background-color: var(--clr-purple-100);
+  background-color: var(--clr-indigo-100);
 }
 
 .todo__tasks {
@@ -372,7 +386,7 @@ li {
 
 .task-list__empty-text {
   font-size: 1.2rem;
-  color: var(--clr-grey-900);
+  color: var(--text-primary);
 }
 
 .task input:focus {
@@ -385,18 +399,18 @@ li {
 
 .completed .active-check {
   display: inline-block;
-  left: 18px;
+  left: 24px;
   top: 20px;
   position: absolute;
-  color: var(--clr-grey-100);
+  color: var(--clr-slate-100);
 }
 
 .current-checkbox {
-  color: var(--clr-purple-500);
+  color: var(--clr-indigo-500);
 }
 
 .completed .current-checkbox {
-  background-color: var(--clr-purple-500);
+  background-color: var(--clr-indigo-500);
 }
 
 .task__text {
@@ -404,9 +418,14 @@ li {
   color: var(--text-primary);
 }
 
+.modal__text {
+  color: var(--text-primary);
+  text-align: center;
+}
+
 .checkbox.visually-hidden:checked ~ .task__text {
   text-decoration: line-through;
-  color: var(--clr-grey-300);
+  color: var(--clr-slate-400);
 }
 
 
@@ -456,7 +475,7 @@ li {
   width: 100%;
   height: 100vh;
   gap: 16px;
-  padding: 16px 22px calc(12px + env(safe-area-inset-bottom)) 22px;
+  padding: 16px 22px calc(32px + env(safe-area-inset-bottom)) 22px;
 
   transform: translateY(0);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -509,8 +528,8 @@ li {
 }
 
 .active {
-  background-color: var(--clr-purple-700);
-  border: 1px solid var(--clr-purple-500);
+  background-color: var(--clr-indigo-700);
+  border: 1px solid var(--clr-indigo-500);
 }
 
 @media (min-width: 576px) {

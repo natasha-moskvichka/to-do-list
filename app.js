@@ -1,4 +1,7 @@
-import { createTaskButtons } from "./components.js";
+import {createTaskButtons} from "./components.js";
+import {translations} from "./languages.js";
+
+let currentLanguage = localStorage.getItem('todo-lang') || 'ru';
 
 const html = document.documentElement;
 const toggleBtn = document.querySelector('.toolbar__theme-btn');
@@ -21,8 +24,8 @@ const container = document.querySelector('.todo');
 const openModalBtn = container.querySelector('.actions__add-btn');
 const modal = document.querySelector('.modal');
 const tasksList = container.querySelector('.tasks-list__items');
-const btnConfirmAdd = document.querySelector('.modal__btn-save'); // btn apply
-const btnCancelAdd = document.querySelector('.modal__btn-cancel'); // btn cancel
+const btnConfirmAdd = document.querySelector('.modal__btn-save');
+const btnCancelAdd = document.querySelector('.modal__btn-cancel');
 const inputTask = document.querySelector('.modal__input');
 const clearBtn = document.querySelector('.actions__clear-btn');
 const plug = container.querySelector('.task-list__empty');
@@ -33,6 +36,7 @@ const btnConfirmEdit = document.querySelector('#btnSaveEdit');
 const filterBtns = container.querySelectorAll('.filter__item');
 const filterDropdown = container.querySelector('.filter__dropdown');
 const btnChevron = container.querySelector('.btn__chevron');
+const btnChangeLanguage = container.querySelector('.btn-lang');
 const celebrationModal = document.querySelector('#celebrationModal');
 const btnCloseCelebration = document.querySelector('#btnCloseCelebration');
 
@@ -43,7 +47,7 @@ function updatePlaceholder() {
     if (tasks.length > 0) {
         plug.classList.add('hidden');
         clearBtn.classList.remove('hidden');
-       // btnSelectTask.classList.remove('hidden');
+        // btnSelectTask.classList.remove('hidden');
     } else {
         plug.classList.remove('hidden');
         clearBtn.classList.add('hidden');
@@ -67,7 +71,7 @@ function createTaskLi(taskStorage) {
     label.htmlFor = taskStorage.id;
 
     // Получаем иконки для чекбокса
-    const {checkIcon, checkboxIcon} = createTaskButtons();
+    const {checkIcon, checkboxIcon} = createTaskButtons(currentLanguage);
     label.appendChild(checkboxIcon);
     label.appendChild(checkIcon);
 
@@ -80,7 +84,7 @@ function createTaskLi(taskStorage) {
     listItem.appendChild(textSpan);
 
     // Кнопки управления задачей
-    const {editTaskBtn, deleteTaskBtn, importantBtn} = createTaskButtons();// Получаем кнопки из функции createTaskButtons
+    const {editTaskBtn, deleteTaskBtn, importantBtn} = createTaskButtons(currentLanguage);// Получаем кнопки из функции createTaskButtons
     listItem.appendChild(importantBtn);
     listItem.appendChild(editTaskBtn);
     listItem.appendChild(deleteTaskBtn);
@@ -90,14 +94,12 @@ function createTaskLi(taskStorage) {
         listItem.classList.add('completed');
         editTaskBtn.classList.add('hidden');
         deleteTaskBtn.classList.add('hidden');
+        importantBtn.classList.add('hidden');
     }
 
     if (taskStorage.status === 'important') {
-        //importantBtn.classList.add('btn__status--important');
         listItem.classList.add('task--important')
     }
-
-    //importantBtn.ariaLabel = 'Убрать отметку важности';
 
     importantBtn.addEventListener('click', () => {
         if (taskStorage.status === 'important') {
@@ -108,25 +110,24 @@ function createTaskLi(taskStorage) {
             importantBtn.ariaLabel = 'Убрать отметку важности';
         }
 
-       // importantBtn.classList.toggle('btn__status--important', taskStorage.status === 'important');
         listItem.classList.toggle('task--important', taskStorage.status === 'important');
 
         saveTask();
     })
-
 
     checkbox.addEventListener('change', () => {
         taskStorage.completed = checkbox.checked;
         listItem.classList.toggle('completed', checkbox.checked);
         editTaskBtn.classList.toggle('hidden', checkbox.checked);
         deleteTaskBtn.classList.toggle('hidden', checkbox.checked);
+        importantBtn.classList.toggle('hidden', checkbox.checked);
 
         saveTask();
 
         const isAllCompleted = tasks.length > 0 && tasks.every(task => task.completed === true);
         if (isAllCompleted === true) {
             celebrationModal.classList.remove('modal--hidden');
-            confetti({ zIndex: 99999 });
+            confetti({zIndex: 99999});
         }
     });
 
@@ -186,17 +187,17 @@ function searchTask() {
 function filterAndRenderTasks() {
     tasksList.innerHTML = '';
 
-   const filteredTasks = tasks.filter(elem => {
-       if (currentFilter === 'all') {
-           return true;
-       }
-       if (currentFilter === 'completed') {
-           return elem.completed === true;
-       }
-       if (currentFilter === 'uncompleted') {
-           return elem.completed === false;
-       }
-   })
+    const filteredTasks = tasks.filter(elem => {
+        if (currentFilter === 'all') {
+            return true;
+        }
+        if (currentFilter === 'completed') {
+            return elem.completed === true;
+        }
+        if (currentFilter === 'uncompleted') {
+            return elem.completed === false;
+        }
+    })
 
     filteredTasks.forEach(renderTask);
 }
@@ -204,14 +205,86 @@ function filterAndRenderTasks() {
 function openModalNewTask() {
     currentEditIndex = null;
     inputTask.value = '';
-    inputTask.placeholder = 'Введите новую задачу...';
+    inputTask.placeholder = translations[currentLanguage].inputPlaceholderTask;
 
     const title = document.querySelector('h2');
-    title.textContent = 'Создать новую задачу';
+    title.textContent = translations[currentLanguage].capture;
     btnConfirmAdd.classList.remove('hidden');
     btnConfirmEdit.classList.add('modal__btn-save--hidden');
 
     modal.classList.remove('modal--hidden');
+}
+
+if (clearBtn) {
+    clearBtn.textContent = translations[currentLanguage].btnClearAll;
+}
+
+function changeLanguage() {
+    document.documentElement.lang = currentLanguage;
+
+    const title = document.querySelector('.todo__title');
+    const btnTextLang = document.querySelector('.btn__text');
+    const searchInput = document.querySelector('.search__input');
+    const filterAll = document.querySelector('[data-filter="all"]');
+    const filterCompleted = document.querySelector('[data-filter="completed"]');
+    const filterUncompleted = document.querySelector('[data-filter="uncompleted"]');
+    const filterBtnText = btnSelectTask.querySelector('.btn__text');
+
+    const capture = document.querySelector('#celebrationModal .modal__title');
+    const simpleModal = document.querySelector('#simpleModal .modal__title');
+    const modalText = document.querySelector('#celebrationModal .modal__text');
+    const emptyText = document.querySelector('.task-list__empty-text');
+    const btnCancelText = document.querySelector('.modal__btn-cancel .btn__text');
+    const btnSaveText = document.querySelector('.modal__btn-save .btn__text');
+    const btnSaveNewTask = document.querySelector('#btnSaveEdit .btn__text');
+    const btnCelebrationText = btnCloseCelebration.querySelector('.btn__text');
+
+    if (capture) {
+        capture.textContent = translations[currentLanguage].titleSuccess;
+    }
+
+    if (emptyText) {
+        emptyText.textContent = translations[currentLanguage].plug;
+    }
+
+    if (simpleModal) {
+        simpleModal.textContent = translations[currentLanguage].capture;
+    }
+
+    title.textContent = translations[currentLanguage].title;
+    btnTextLang.textContent = translations[currentLanguage].btnLang;
+    searchInput.placeholder = translations[currentLanguage].inputPlaceholderSearch;
+    filterAll.textContent = translations[currentLanguage].filtersAll;
+    filterCompleted.textContent = translations[currentLanguage].filterCompleted;
+    filterUncompleted.textContent = translations[currentLanguage].filterUncompleted;
+    filterBtnText.textContent = translations[currentLanguage].btnAllTasks;
+    capture.textContent = translations[currentLanguage].titleSuccess;
+    modalText.textContent = translations[currentLanguage].textSuccess;
+    simpleModal.textContent = translations[currentLanguage].capture;
+    btnCancelText.textContent = translations[currentLanguage].btnCancel;
+    btnSaveText.textContent = translations[currentLanguage].btnSave;
+    btnSaveNewTask.textContent = translations[currentLanguage].btnSave;
+    btnCelebrationText.textContent = translations[currentLanguage].btnSuccess;
+    emptyText.textContent = translations[currentLanguage].plug;
+
+    if (clearBtn) {
+        clearBtn.textContent = translations[currentLanguage].btnClearAll;
+    }
+}
+
+btnChangeLanguage.addEventListener('click', () => {
+    if (currentLanguage === 'ru') {
+        currentLanguage = 'en';
+    } else {
+        currentLanguage = 'ru';
+    }
+    localStorage.setItem('todo-lang', currentLanguage);
+
+    changeLanguage();
+});
+
+if (clearBtn) {
+    clearBtn.textContent = translations[currentLanguage].btnClearAll;
 }
 
 btnSelectTask.addEventListener('click', () => {
@@ -224,6 +297,7 @@ clearBtn.addEventListener('click', () => {
     tasks = [];
     localStorage.setItem('tasks', JSON.stringify(tasks));
     tasksList.innerHTML = '';
+
     updatePlaceholder();
 })
 
@@ -240,7 +314,7 @@ btnConfirmAdd.addEventListener('click', () => {
     const uniqueId = 'todo-' + Date.now() + Math.random().toString(36).slice(2, 4);
 
     let taskData = {
-        id: '',
+        id: uniqueId,
         title: '',
         status: 'normal',
         completed: false
@@ -249,7 +323,6 @@ btnConfirmAdd.addEventListener('click', () => {
     if (value === '') return;
     taskData.title = value;
     taskData.id = uniqueId;
-    console.log(taskData)
     tasks.push(taskData);
     saveTask();
     renderTask(taskData);
@@ -297,7 +370,7 @@ tasksList.addEventListener('click', (e) => {
         modal.classList.remove('modal--hidden');
 
         const title = document.querySelector('h2');
-        title.textContent = 'Редактирование задачи';
+        title.textContent = translations[currentLanguage].modalCapture;
         inputTask.placeholder = editTaskText;
         inputTask.value = editTaskText;
 
@@ -322,5 +395,6 @@ btnCloseCelebration.addEventListener('click', () => {
     celebrationModal.classList.add('modal--hidden');
 })
 
+changeLanguage();
 filterAndRenderTasks();
 updatePlaceholder();

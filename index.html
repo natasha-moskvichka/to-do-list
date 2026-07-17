@@ -11,11 +11,24 @@
 <body>
 
 <div class="todo">
-    <h1 class="todo__title">Список задач</h1>
+    <div class="todo__header">
+        <h1 class="todo__title">Список задач</h1>
+        <div class="controls">
+            <button type="button" class="btn btn--outline btn-lang" aria-label="Переключить язык">
+                <span class="btn__text">ru</span>
+            </button>
+
+            <button type="button" class="btn btn--filled btn--icon toolbar__theme-btn" aria-label="Переключить тему">
+                <svg class="btn__icon" width="24" height="24">
+                    <use href="./fonts/sprite/sprite.svg#theme-light"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
     <div class="toolbar todo__toolbar">
         <div class="toolbar toolbar__search">
             <input type="text" class="search__input" placeholder="Поиск задачи..." id="input-search">
-            <button type="button" class="btn btn-default btn--icon search__button">
+            <button type="button" class="btn btn-default btn--icon search__button" aria-label="Поиск задачи">
                 <svg class="btn__icon" width="21" height="21">
                     <use href="./fonts/sprite/sprite.svg#search"></use>
                 </svg>
@@ -37,11 +50,6 @@
                 </ul>
             </div>
         </div>
-        <button type="button" class="btn btn--filled btn--icon toolbar__theme-btn">
-            <svg class="btn__icon" width="24" height="24">
-                <use href="./fonts/sprite/sprite.svg#theme-light"></use>
-            </svg>
-        </button>
     </div>
     <div class="todo__tasks">
         <!--place for tasks-->
@@ -54,7 +62,7 @@
     </div>
     <div class="actions todo__actions">
         <button type="button" class="btn actions__clear-btn btn--outline">Удалить все задачи</button>
-        <button type="button" class="btn actions__add-btn btn--filled btn--round">
+        <button type="button" class="btn actions__add-btn btn--filled btn--round" aria-label="Добавить новую задачу">
             <svg class="btn__icon" width="24" height="24">
                 <use href="./fonts/sprite/sprite.svg#add"></use>
             </svg>
@@ -62,7 +70,7 @@
     </div>
 
 </div>
-<div class="modal modal--hidden">
+<div class="modal modal--hidden" id="simpleModal">
     <div class="modal__card">
         <h2 class="modal__title"></h2>
         <div class="modal__field">

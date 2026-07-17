@@ -1,9 +1,11 @@
-export function createTaskButtons() {
+import { translations } from "./languages.js";
+
+export function createTaskButtons(lang = 'ru') {
     const SVG_NS = 'http://www.w3.org/2000/svg';
 
     const editTaskBtn = document.createElement('button');
     editTaskBtn.className = 'btn task__btn-edit';
-    editTaskBtn.ariaLabel = 'Редактировать задачу';
+    editTaskBtn.ariaLabel = translations[lang].modalCapture;
 
     /*create svg*/
     const editIcon = document.createElementNS(SVG_NS, 'svg');
@@ -18,7 +20,7 @@ export function createTaskButtons() {
 
     const deleteTaskBtn = document.createElement('button');
     deleteTaskBtn.className = 'btn task__btn-trash';
-    deleteTaskBtn.ariaLabel = 'Удалить задачу';
+    deleteTaskBtn.ariaLabel = translations[lang].btnLabel;
 
     const deleteIcon = document.createElementNS(SVG_NS, 'svg');
     deleteIcon.setAttribute('width', '18');
@@ -50,7 +52,7 @@ export function createTaskButtons() {
     importantBtn.className = 'btn task__btn-status';
     importantSpan.className = 'task__span-status';
     importantBtn.appendChild(importantSpan);
-    importantBtn.ariaLabel = 'Отметить задачу как важную';
+    importantBtn.ariaLabel = translations[lang].ariaImportant;
 
     return {editTaskBtn, deleteTaskBtn, checkIcon, checkboxIcon, importantBtn};
 }
