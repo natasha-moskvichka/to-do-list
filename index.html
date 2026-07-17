@@ -26,40 +26,42 @@
             </button>
         </div>
     </div>
-    <div class="toolbar todo__toolbar">
-        <div class="toolbar toolbar__search">
-            <input type="text" class="search__input" placeholder="Поиск задачи..." id="input-search">
-            <button type="button" class="btn btn-default btn--icon search__button" aria-label="Поиск задачи">
-                <svg class="btn__icon" width="21" height="21">
-                    <use href="./fonts/sprite/sprite.svg#search"></use>
-                </svg>
-            </button>
-        </div>
-        <div class="filter toolbar__filter">
-            <button type="button" class="btn btn--filled btn__text filter__button">
-                <span class="btn__text">Все задачи</span>
-                <svg class="btn__icon btn__chevron" width="7" height="4">
-                    <use href="./fonts/sprite/sprite.svg#chevron-top"></use>
-                </svg>
-            </button>
+    <div class="todo__content">
+        <div class="toolbar todo__toolbar">
+            <div class="toolbar toolbar__search">
+                <input type="text" class="search__input" placeholder="Поиск задачи..." id="input-search">
+                <button type="button" class="btn btn-default btn--icon search__button" aria-label="Поиск задачи">
+                    <svg class="btn__icon" width="21" height="21">
+                        <use href="./fonts/sprite/sprite.svg#search"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="filter toolbar__filter">
+                <button type="button" class="btn btn--filled btn__text filter__button">
+                    <span class="btn__text">Все задачи</span>
+                    <svg class="btn__icon btn__chevron" width="7" height="4">
+                        <use href="./fonts/sprite/sprite.svg#chevron-top"></use>
+                    </svg>
+                </button>
 
-            <div class="filter__dropdown hidden">
-                <ul class="filter__list">
-                    <li data-filter="all" class="filter__item">Все</li>
-                    <li data-filter="completed" class="filter__item">Завершенные</li>
-                    <li data-filter="uncompleted" class="filter__item">Незавершенные</li>
-                </ul>
+                <div class="filter__dropdown hidden">
+                    <ul class="filter__list">
+                        <li data-filter="all" class="filter__item">Все</li>
+                        <li data-filter="completed" class="filter__item">Завершенные</li>
+                        <li data-filter="uncompleted" class="filter__item">Незавершенные</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="todo__tasks">
-        <!--place for tasks-->
-        <ul class="tasks-list__items"></ul>
-        <div class="task-list__empty">
-            <img src="images/plug-empty.png" alt="Plug">
-            <p class="task-list__empty-text">Пусто...</p>
-        </div>
+        <div class="todo__tasks">
+            <!--place for tasks-->
+            <ul class="tasks-list__items"></ul>
+            <div class="task-list__empty">
+                <img src="images/plug-empty.png" alt="Plug">
+                <p class="task-list__empty-text">Пусто...</p>
+            </div>
 
+        </div>
     </div>
     <div class="actions todo__actions">
         <button type="button" class="btn actions__clear-btn btn--outline">Удалить все задачи</button>
@@ -69,8 +71,8 @@
             </svg>
         </button>
     </div>
-
 </div>
+
 <div class="modal modal--hidden" id="simpleModal">
     <div class="modal__card">
         <h2 class="modal__title"></h2>

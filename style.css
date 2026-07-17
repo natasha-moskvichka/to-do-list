@@ -94,11 +94,18 @@ li {
   padding: 0 15px;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--padding-base) * 2);
+  height: calc(100dvh - var(--padding-base) * 2);
+  overflow: hidden;
 }
 .todo__header {
   display: flex;
   justify-content: space-between;
+}
+.todo__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 .controls {
@@ -337,6 +344,11 @@ li {
 .todo__tasks {
   margin-bottom: 1.5rem;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .task-list__empty {
