@@ -353,7 +353,7 @@ li {
 
 .task {
   text-transform: uppercase;
-  font-size: 20px;
+  font-size: 16px;
   color: var(--clr-slate-900);
   position: relative;
   padding: 8px;
@@ -446,11 +446,15 @@ li {
 .task__text {
   margin-left: 40px;
   color: var(--text-primary);
-  white-space: nowrap;
+  //white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   flex-grow: 1;
   min-width: 0;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .modal__text {
