@@ -38,6 +38,7 @@ const filterBtns = container.querySelectorAll('.filter__item');
 const filterDropdown = container.querySelector('.filter__dropdown');
 const btnChevron = container.querySelector('.btn__chevron');
 const btnChangeLanguage = container.querySelector('.btn-lang');
+let inputTime = document.querySelector('.modal__time-input');
 const celebrationModal = document.querySelector('#celebrationModal');
 const btnCloseCelebration = document.querySelector('#btnCloseCelebration');
 
@@ -356,7 +357,8 @@ btnConfirmAdd.addEventListener('click', () => {
         id: uniqueId,
         title: '',
         status: 'normal',
-        completed: false
+        completed: false,
+        reminderTime: inputTime.value
     }
     const value = inputTask.value.trim();
     if (value === '') return;
@@ -366,6 +368,7 @@ btnConfirmAdd.addEventListener('click', () => {
     saveTask();
     renderTask(taskData);
     inputTask.value = '';
+    inputTime.value = '';
     modal.classList.add('modal--hidden');
     updatePlaceholder();
 });
@@ -435,8 +438,38 @@ btnCloseCelebration.addEventListener('click', () => {
 })
 
 archivedBtn.addEventListener('click', archiveCompletedTasks);
-console.log(archivedBtn)
 
 changeLanguage();
 filterAndRenderTasks();
 updatePlaceholder();
+
+function unlockAudio () {
+    const audio = new Audio('audio/bell.mp3');
+    audio.muted = true;
+    audio.play()
+        .then(() => {
+            document.removeEventListener('click', unlockAudio);
+            console.log('Аудио успешно разблокировано браузером!');
+        })
+        .catch(err => console.log('Ожидание клика пользователя...'))
+}
+
+document.addEventListener('click', unlockAudio);
+
+function checkReminders () {
+    const now = new Date();
+    const currentHours = String(now.getHours()).padStart(2, '0');
+    const currentMinutes = String(now.getHours()).padStart(2, '0');
+    const currentTime = `${currentHours} : ${currentMinutes}`;
+
+    tasks.forEach(task => {
+        if (!task.completed && task.reminderTime === currentTime) {
+            const audio = new Audio('audio/bell.mp3');
+            audio.play();
+            task.reminderTime = '';
+            saveTask();
+        }
+    })
+}
+
+setInterval(checkReminders, 60000);
