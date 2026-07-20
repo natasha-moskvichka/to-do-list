@@ -28,6 +28,7 @@ const btnConfirmAdd = document.querySelector('.modal__btn-save');
 const btnCancelAdd = document.querySelector('.modal__btn-cancel');
 const inputTask = document.querySelector('.modal__input');
 const clearBtn = document.querySelector('.actions__clear-btn');
+const archivedBtn = document.querySelector('.actions__archive-btn');
 const plug = container.querySelector('.task-list__empty');
 const search = container.querySelector('#input-search');
 const btnSearchTask = container.querySelector('.search__button');
@@ -43,15 +44,44 @@ const btnCloseCelebration = document.querySelector('#btnCloseCelebration');
 let currentEditIndex = null;
 let currentFilter = 'all';
 
+let archivedTasks = JSON.parse(localStorage.getItem('todo-archive') || '[]');
+
+function saveArchive() {
+    localStorage.setItem('todo-archive', JSON.stringify(archivedTasks));
+}
+
+function archiveCompletedTasks() {
+    const completed = tasks.filter(task => task.completed === true);
+
+    if (completed.length === 0) return;
+
+    archivedTasks.push(...completed);
+
+    tasks = tasks.filter(task => task.completed === false);
+    saveTask();
+    saveArchive();
+    filterAndRenderTasks();
+}
+
 function updatePlaceholder() {
     if (tasks.length > 0) {
         plug.classList.add('hidden');
         clearBtn.classList.remove('hidden');
-        // btnSelectTask.classList.remove('hidden');
     } else {
         plug.classList.remove('hidden');
         clearBtn.classList.add('hidden');
-        //btnSelectTask.classList.add('hidden');
+    }
+
+    if (archivedBtn) {
+        const hasCompletedTasks = tasks.some(task => task.completed === true);
+
+        if (hasCompletedTasks) {
+            archivedBtn.classList.remove('hidden', 'btn--disabled');
+            archivedBtn.disabled = false;
+        } else {
+            archivedBtn.classList.add('hidden', 'btn--disabled');
+            archivedBtn.disabled = true;
+        }
     }
 }
 
@@ -123,6 +153,7 @@ function createTaskLi(taskStorage) {
         importantBtn.classList.toggle('hidden', checkbox.checked);
 
         saveTask();
+        updatePlaceholder();
 
         const isAllCompleted = tasks.length > 0 && tasks.every(task => task.completed === true);
         if (isAllCompleted === true) {
@@ -187,17 +218,23 @@ function searchTask() {
 function filterAndRenderTasks() {
     tasksList.innerHTML = '';
 
-    const filteredTasks = tasks.filter(elem => {
-        if (currentFilter === 'all') {
-            return true;
-        }
-        if (currentFilter === 'completed') {
-            return elem.completed === true;
-        }
-        if (currentFilter === 'uncompleted') {
-            return elem.completed === false;
-        }
-    })
+    let filteredTasks;
+
+    if (currentFilter === 'archived') {
+        filteredTasks = archivedTasks;
+    } else {
+        filteredTasks = tasks.filter(elem => {
+            if (currentFilter === 'all') {
+                return true;
+            }
+            if (currentFilter === 'completed') {
+                return elem.completed === true;
+            }
+            if (currentFilter === 'uncompleted') {
+                return elem.completed === false;
+            }
+        })
+    }
 
     filteredTasks.forEach(renderTask);
 }
@@ -228,6 +265,7 @@ function changeLanguage() {
     const filterAll = document.querySelector('[data-filter="all"]');
     const filterCompleted = document.querySelector('[data-filter="completed"]');
     const filterUncompleted = document.querySelector('[data-filter="uncompleted"]');
+    const filterArchived = document.querySelector('[data-filter="archived"]');
     const filterBtnText = btnSelectTask.querySelector('.btn__text');
 
     const capture = document.querySelector('#celebrationModal .modal__title');
@@ -257,6 +295,7 @@ function changeLanguage() {
     filterAll.textContent = translations[currentLanguage].filtersAll;
     filterCompleted.textContent = translations[currentLanguage].filterCompleted;
     filterUncompleted.textContent = translations[currentLanguage].filterUncompleted;
+    filterArchived.textContent = translations[currentLanguage].filterArchived;
     filterBtnText.textContent = translations[currentLanguage].btnAllTasks;
     capture.textContent = translations[currentLanguage].titleSuccess;
     modalText.textContent = translations[currentLanguage].textSuccess;
@@ -270,6 +309,10 @@ function changeLanguage() {
     if (clearBtn) {
         clearBtn.textContent = translations[currentLanguage].btnClearAll;
     }
+    if (archivedBtn) {
+        archivedBtn.textContent = translations[currentLanguage].btnArchived;
+    }
+
 }
 
 btnChangeLanguage.addEventListener('click', () => {
@@ -282,10 +325,6 @@ btnChangeLanguage.addEventListener('click', () => {
 
     changeLanguage();
 });
-
-if (clearBtn) {
-    clearBtn.textContent = translations[currentLanguage].btnClearAll;
-}
 
 btnSelectTask.addEventListener('click', () => {
     filterDropdown.classList.toggle('hidden');
@@ -394,6 +433,9 @@ filterBtns.forEach(filterBtn => {
 btnCloseCelebration.addEventListener('click', () => {
     celebrationModal.classList.add('modal--hidden');
 })
+
+archivedBtn.addEventListener('click', archiveCompletedTasks);
+console.log(archivedBtn)
 
 changeLanguage();
 filterAndRenderTasks();

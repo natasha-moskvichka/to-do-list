@@ -136,6 +136,7 @@ li {
   border: 1px solid var(--clr-indigo-500);
   border-radius: var(--radius-base);
   padding: 10px 20px;
+  color: var(--clr-indigo-500);
 }
 .btn--outline .btn__text {
   color: var(--clr-indigo-500);
@@ -164,16 +165,26 @@ li {
   margin-left: auto;
 }
 
+.btn--disabled {
+  border-color: var(--clr-slate-400);
+  color: var(--clr-slate-400);
+  opacity: 0.7;
+  cursor: default;
+}
+.btn--disabled .btn__text {
+  color: var(--clr-slate-400);
+}
+
 .task__btn-trash,
 .task__btn-edit,
 .task__btn-status {
-  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
-.task__btn-edit {
-  right: 60px;
-  top: 7px;
-}
 .task__btn-edit .task__icon-edit {
   color: var(--clr-slate-400);
 }
@@ -181,10 +192,6 @@ li {
   color: var(--clr-indigo-500);
 }
 
-.task__btn-trash {
-  right: 6px;
-  top: 7px;
-}
 .task__btn-trash .task__icon-trash {
   color: var(--clr-slate-400);
 }
@@ -192,10 +199,6 @@ li {
   color: var(--clr-red-500);
 }
 
-.task__btn-status {
-  top: 7px;
-  right: 114px;
-}
 .task__btn-status:hover .task__span-status {
   background-color: var(--clr-red-500);
 }
@@ -226,6 +229,15 @@ li {
 .hidden,
 .modal__btn-save--hidden {
   display: none !important;
+}
+
+.btn--outline.disabled {
+  border-color: var(--clr-slate-400);
+  cursor: default;
+  opacity: 0.7;
+}
+.btn--outline.disabled .btn__text {
+  color: var(--clr-slate-400);
 }
 
 /*-----input - select - dropdown-----*/
@@ -316,11 +328,11 @@ li {
   font-size: 20px;
   color: var(--clr-slate-900);
   position: relative;
-  padding: 16px 90px 16px 18px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  padding: 8px;
   border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
 }
 
 .task::after {
@@ -389,7 +401,7 @@ li {
 
 .completed .active-check {
   display: inline-block;
-  left: 24px;
+  left: 14px;
   top: 20px;
   position: absolute;
   color: var(--clr-slate-100);
@@ -406,6 +418,11 @@ li {
 .task__text {
   margin-left: 40px;
   color: var(--text-primary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .modal__text {

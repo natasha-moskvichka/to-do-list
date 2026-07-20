@@ -49,6 +49,7 @@
                         <li data-filter="all" class="filter__item">Все</li>
                         <li data-filter="completed" class="filter__item">Завершенные</li>
                         <li data-filter="uncompleted" class="filter__item">Незавершенные</li>
+                        <li data-filter="archived" class="filter__item">Архив</li>
                     </ul>
                 </div>
             </div>
@@ -64,7 +65,12 @@
         </div>
     </div>
     <div class="actions todo__actions">
-        <button type="button" class="btn actions__clear-btn btn--outline">Удалить все задачи</button>
+        <button type="button" class="btn actions__clear-btn btn--outline">
+            <span class="btn__text">Удалить все задачи</span>
+        </button>
+        <button type="button" class="btn actions__archive-btn btn--outline btn--disabled" disabled>
+            <span class="btn__text">Переместить в архив</span>
+        </button>
         <button type="button" class="btn actions__add-btn btn--filled btn--round" aria-label="Добавить новую задачу">
             <svg class="btn__icon" width="24" height="24">
                 <use href="./fonts/sprite/sprite.svg#add"></use>
