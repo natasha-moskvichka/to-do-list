@@ -54,5 +54,10 @@ export function createTaskButtons(lang = 'ru') {
     importantBtn.appendChild(importantSpan);
     importantBtn.ariaLabel = translations[lang].ariaImportant;
 
-    return {editTaskBtn, deleteTaskBtn, checkIcon, checkboxIcon, importantBtn};
+    const inProgressBtn = document.createElement('button');
+    inProgressBtn.textContent = '';
+    inProgressBtn.className = 'task__btn-status task__btn-progress';
+    importantBtn.ariaLabel = translations[lang].ariaImportant;
+
+    return {editTaskBtn, deleteTaskBtn, checkIcon, checkboxIcon, importantBtn, inProgressBtn};
 }

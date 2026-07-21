@@ -126,10 +126,11 @@ li {
   min-width: 44px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1;
   padding: 0.5rem 0.75rem;
   gap: 12px;
+  white-space: nowrap;
 }
 
 .btn--outline {
@@ -201,6 +202,36 @@ li {
 
 .task__btn-status:hover .task__span-status {
   background-color: var(--clr-red-500);
+}
+
+.task__btn-progress {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--clr-slate-400);
+  border-radius: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: all 0.3s ease;
+}
+
+.task__btn-progress:hover {
+  border-color: var(--status-important);
+}
+
+.task--in-progress .task__btn-progress {
+  border-color: var(--status-important);
+  background-color: var(--status-important);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+.task--in-progress {
+  background-color: rgba(251, 191, 36, 0.03);
+}
+
+.completed.task--in-progress {
+  background-color: inherit;
 }
 
 .task__span-status {
@@ -516,7 +547,7 @@ li {
   text-transform: uppercase;
   text-align: center;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1rem;
 }
 
 .todo__title {
@@ -524,7 +555,7 @@ li {
   text-transform: uppercase;
   text-align: center;
   font-weight: 600;
-  font-size: 2.25rem;
+  font-size: 1.75rem;
   margin: 1.5rem 0;
 }
 
@@ -542,7 +573,7 @@ li {
 
 @media (min-width: 576px) {
   .todo__title {
-    font-size: 1.75rem;
+    font-size: 2.25rem;
   }
   .modal__title {
     font-size: 1.5rem;

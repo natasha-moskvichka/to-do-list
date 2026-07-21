@@ -1,6 +1,8 @@
 import {createTaskButtons} from "./components.js";
 import {translations} from "./languages.js";
 
+const globalBell = new Audio('audio/bell.mp3');
+
 let currentLanguage = localStorage.getItem('todo-lang') || 'ru';
 
 const html = document.documentElement;
@@ -115,10 +117,29 @@ function createTaskLi(taskStorage) {
     listItem.appendChild(textSpan);
 
     // Кнопки управления задачей
-    const {editTaskBtn, deleteTaskBtn, importantBtn} = createTaskButtons(currentLanguage);// Получаем кнопки из функции createTaskButtons
+    const {editTaskBtn, deleteTaskBtn, importantBtn, inProgressBtn} = createTaskButtons(currentLanguage);// Получаем кнопки из функции createTaskButtons
     listItem.appendChild(importantBtn);
     listItem.appendChild(editTaskBtn);
     listItem.appendChild(deleteTaskBtn);
+    listItem.appendChild(inProgressBtn);
+
+    if (taskStorage.status === 'in-progress') {
+        listItem.classList.add('task--in-progress');
+    }
+
+    inProgressBtn.addEventListener('click', () => {
+        if (taskStorage.status === 'in-progress') {
+            taskStorage.status = 'normal';
+            inProgressBtn.ariaLabel = currentLanguage === 'ru' ? 'Отметить как в процессе' : 'Mark as in progress';
+        } else {
+            taskStorage.status = 'in-progress';
+            inProgressBtn.ariaLabel = currentLanguage === 'ru' ? 'Убрать статус в процессе' : 'Remove in progress status';
+        }
+
+        listItem.classList.toggle('task--in-progress', taskStorage.status === 'in-progress');
+
+        saveTask();
+    })
 
     if (taskStorage.completed) {
         checkbox.checked = true;
@@ -126,6 +147,7 @@ function createTaskLi(taskStorage) {
         editTaskBtn.classList.add('hidden');
         deleteTaskBtn.classList.add('hidden');
         importantBtn.classList.add('hidden');
+        inProgressBtn.classList.add('hidden');
     }
 
     if (taskStorage.status === 'important') {
@@ -152,6 +174,7 @@ function createTaskLi(taskStorage) {
         editTaskBtn.classList.toggle('hidden', checkbox.checked);
         deleteTaskBtn.classList.toggle('hidden', checkbox.checked);
         importantBtn.classList.toggle('hidden', checkbox.checked);
+        inProgressBtn.classList.toggle('hidden', checkbox.checked);
 
         saveTask();
         updatePlaceholder();
@@ -351,6 +374,11 @@ btnCancelAdd.addEventListener('click', () => {
 
 /*добавление новой задачи*/
 btnConfirmAdd.addEventListener('click', () => {
+    globalBell.play().then(() => {
+        globalBell.pause();
+        globalBell.currentTime = 0;
+    }).catch(e => console.log("Аудио ждет полной активации"));
+
     const uniqueId = 'todo-' + Date.now() + Math.random().toString(36).slice(2, 4);
 
     let taskData = {
@@ -383,11 +411,6 @@ tasksList.addEventListener('click', (e) => {
     if (trashBtn) {
         const taskItem = trashBtn.closest('.task');
         if (!taskItem) return;
-
-        //const textSpan = taskItem.querySelector('.task__text');
-        //const taskText = textSpan ? textSpan.textContent.trim() : '';
-
-        //const index = tasks.findIndex(task => task === taskText);
         const taskElements = Array.from(tasksList.querySelectorAll('.task'));
         const index = taskElements.indexOf(taskItem);
 
@@ -405,7 +428,6 @@ tasksList.addEventListener('click', (e) => {
         const textSpan = editTask.querySelector('.task__text');
         const editTaskText = textSpan ? textSpan.textContent.trim() : '';
 
-        //const index = tasks.findIndex(currentTask => currentTask === editTaskText);
         const taskElements = Array.from(tasksList.querySelectorAll('.task'));
         currentEditIndex = taskElements.indexOf(editTask);
 
@@ -443,19 +465,6 @@ changeLanguage();
 filterAndRenderTasks();
 updatePlaceholder();
 
-function unlockAudio () {
-    const audio = new Audio('audio/bell.mp3');
-    audio.muted = true;
-    audio.play()
-        .then(() => {
-            document.removeEventListener('click', unlockAudio);
-            console.log('Аудио успешно разблокировано браузером!');
-        })
-        .catch(err => console.log('Ожидание клика пользователя...'))
-}
-
-document.addEventListener('click', unlockAudio);
-
 function checkReminders () {
     const now = new Date();
     const currentHours = String(now.getHours()).padStart(2, '0');
@@ -464,8 +473,8 @@ function checkReminders () {
 
     tasks.forEach(task => {
         if (!task.completed && task.reminderTime === currentTime) {
-            const audio = new Audio('audio/bell.mp3');
-            audio.play();
+            globalBell.play().catch(err => console.log("Браузер все еще блокирует звук:", err));
+
             task.reminderTime = '';
             saveTask();
         }

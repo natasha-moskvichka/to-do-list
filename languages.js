@@ -8,9 +8,9 @@ export const translations = {
         btnCancel: 'Отмена',
         btnSave: 'Сохранить',
         btnAllTasks: 'Все задачи',
-        btnClearAll: 'Удалить все задачи',
+        btnClearAll: 'Удалить задачи',
         btnLabel: 'Удалить задачу',
-        btnArchived: 'Переместить в архив',
+        btnArchived: 'В архив',
         filtersAll: 'Все',
         filterCompleted: 'Завершенные',
         filterUncompleted: 'Незавершенные',
@@ -21,7 +21,7 @@ export const translations = {
         textSuccess: 'Все задачи выполнены, можно ехать на море!',
         btnSuccess: 'Ура! За билетами!',
         btnLang: 'Ру',
-        plug: 'Пусто...'
+        plug: 'Пока нет ни одной задачи...'
     },
     en: {
         title: 'To-Do List',
@@ -32,9 +32,9 @@ export const translations = {
         btnCancel: 'Cancel',
         btnSave: 'Save',
         btnAllTasks: 'All tasks',
-        btnClearAll: 'Delete all tasks',
+        btnClearAll: 'Delete tasks',
         btnLabel: 'Delete task',
-        btnArchived: 'Move to archive',
+        btnArchived: 'To archive',
         filtersAll: 'All',
         filterCompleted: 'Completed',
         filterUncompleted: 'Uncompleted',
@@ -45,6 +45,6 @@ export const translations = {
         textSuccess: 'All tasks are done, you can relax!',
         btnSuccess: 'Hooray! Off to buy tickets!',
         btnLang: 'En',
-        plug: 'Empty...'
+        plug: 'There are no tasks yet...'
     }
 }
