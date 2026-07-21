@@ -40,7 +40,7 @@ const filterBtns = container.querySelectorAll('.filter__item');
 const filterDropdown = container.querySelector('.filter__dropdown');
 const btnChevron = container.querySelector('.btn__chevron');
 const btnChangeLanguage = container.querySelector('.btn-lang');
-let inputTime = document.querySelector('.modal__time-input');
+//let inputTime = document.querySelector('.modal__time-input');
 const celebrationModal = document.querySelector('#celebrationModal');
 const btnCloseCelebration = document.querySelector('#btnCloseCelebration');
 
@@ -386,7 +386,7 @@ btnConfirmAdd.addEventListener('click', () => {
         title: '',
         status: 'normal',
         completed: false,
-        reminderTime: inputTime.value
+       // reminderTime: inputTime.value
     }
     const value = inputTask.value.trim();
     if (value === '') return;
@@ -396,7 +396,7 @@ btnConfirmAdd.addEventListener('click', () => {
     saveTask();
     renderTask(taskData);
     inputTask.value = '';
-    inputTime.value = '';
+ //   inputTime.value = '';
     modal.classList.add('modal--hidden');
     updatePlaceholder();
 });
